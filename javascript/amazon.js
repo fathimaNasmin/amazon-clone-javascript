@@ -58,19 +58,21 @@ products.forEach((product) => {
     `
 });
 
-
-
-document.querySelector('.js-product-grid').innerHTML = productHTML;
-let cartQuantity = document.querySelector('.js-cart-quantity');
-cartQuantity.innerHTML = 0;
-
-
 function updateCartQuantity(){
     let cartQuantity = 0;
     cart.forEach((item) => {
         cartQuantity += item.quantity;
     });
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity;
+    return cartQuantity;
+}
+
+document.querySelector('.js-product-grid').innerHTML = productHTML;
+let cartQuantityElement = document.querySelector('.js-cart-quantity');
+const cartQuantityCount = updateCartQuantity()
+if (cartQuantityCount === 0 ) {
+  cartQuantityElement.innerHTML = '';
+}else{
+  cartQuantityElement.innerHTML = cartQuantityCount;
 }
 
 
@@ -110,5 +112,7 @@ document.querySelectorAll('.js-add-cart-button').forEach((button) => {
 
     });
 });
+
+
 
 
