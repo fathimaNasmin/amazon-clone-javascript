@@ -131,14 +131,20 @@ document.querySelectorAll('.js-save-quantity-link')
         link.addEventListener('click', () => {
             const { productId } = link.dataset;
             const container = document.querySelector(`.js-cart-container-${productId}`);
-            container.classList.remove('is-editing-quantity');
 
             const newQuantity = Number(document.querySelector(`.js-quantity-input-${productId}`).value);
-            console.log(newQuantity);
-            updateQuantity(productId, newQuantity);
+            
+            if (newQuantity <= 0 || newQuantity > 10){
+                alert("The items should not be less than 0 and greater than 10.");
+                return;
+            }
 
+            updateQuantity(productId, newQuantity);
             document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
             cartQuantityReturnHomeLinkElement.innerHTML = `${calculateCartQuantity()} items`;
 
+            container.classList.remove('is-editing-quantity');
+            
         });
+
     });
