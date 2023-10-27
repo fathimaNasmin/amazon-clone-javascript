@@ -6,6 +6,7 @@ import { deliveryOptions } from "../../data/deliveryOptions.js";
 import { formatDeliveryDate } from "../utils/deliveryDate.js"
 import { formatDeliveryPrice } from "../utils/deliveryPrice.js"
 import { renderPaymentSummary } from "./paymentSummary.js";
+import { renderCheckoutHeader } from "./checkoutHeader.js";
 
 
 export function renderOrderSummary(){
@@ -82,23 +83,18 @@ export function renderOrderSummary(){
     });
 
     document.querySelector('.js-order-summary').innerHTML = cartItemContainerHTML;
-    let cartQuantityReturnHomeLinkElement = document.querySelector('.js-return-home-link');
 
     // delete item from cart
     document.querySelectorAll(`.js-delete-item-link`)
         .forEach((link) => {
             link.addEventListener('click', () => {
-            const {productId} = link.dataset;
-            removeFromCart(productId);
-            cartQuantityReturnHomeLinkElement.innerHTML = `${calculateCartQuantity()} items`;
-            const container = document.querySelector(`.js-cart-container-${productId}`);
-            container.remove();
-            renderPaymentSummary();
+                const {productId} = link.dataset;
+                removeFromCart(productId);
+                renderOrderSummary();
+                renderPaymentSummary();
+                renderCheckoutHeader();
+            });
         });
-    });
-
-
-    cartQuantityReturnHomeLinkElement.innerHTML = `${calculateCartQuantity()} items`;
 
     document.querySelectorAll('.js-update-quantity-link')
         .forEach((link) => {
@@ -125,9 +121,10 @@ export function renderOrderSummary(){
 
                 updateQuantity(productId, newQuantity);
                 document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
-                cartQuantityReturnHomeLinkElement.innerHTML = `${calculateCartQuantity()} items`;
 
                 container.classList.remove('is-editing-quantity');
+                renderPaymentSummary();
+                renderCheckoutHeader();
                 
             });
 

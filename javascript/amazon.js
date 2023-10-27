@@ -71,7 +71,6 @@ function showAddedMessage(productId){
     
 
     const addedToCartMessage = document.querySelector(`.js-added-to-cart-${productId}`);
-    // console.log(addedToCartMessage.innerHTML);
     addedToCartMessage.classList.add('showMessage');
 
     

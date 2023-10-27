@@ -1,4 +1,4 @@
-import {cart} from "../../data/cart.js";
+import {cart,calculateCartQuantity} from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import { deliveryOptions } from "../../data/deliveryOptions.js";
 import {centsToDollars} from "../utils/money.js"
@@ -19,8 +19,7 @@ export function renderPaymentSummary() {
     
     let totalBeforeTax = totalCartPrice + shippingCharges;
     let tax = totalBeforeTax * 0.1;
-    let orderTotal = totalBeforeTax + tax
-    console.log(centsToDollars(orderTotal));
+    let orderTotal = totalBeforeTax + tax;
 
     let html = `
         <div class="payment-summary-title">
@@ -28,7 +27,7 @@ export function renderPaymentSummary() {
         </div>
 
         <div class="payment-summary-row">
-        <div>Items (3):</div>
+        <div>Items (${calculateCartQuantity()}):</div>
         <div class="payment-summary-money">$${centsToDollars(totalCartPrice)}</div>
         </div>
 
@@ -58,6 +57,5 @@ export function renderPaymentSummary() {
     `;
 
     document.querySelector('.js-payment-summary').innerHTML = html;
-    console.log(html);
 
 }
