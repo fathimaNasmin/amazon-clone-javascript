@@ -1,6 +1,11 @@
 import { cart, removeFromCart, calculateCartQuantity, updateQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
-import { centsToDollars } from "./utils/money.js";
+import centsToDollars from "./utils/money.js";
+import { deliveryOptions } from "../data/deliveryOptions.js";
+import { formatDeliveryDate } from "./utils/deliveryDate.js"
+import { formatDeliveryPrice } from "./utils/deliveryPrice.js"
+
+hello();
 
 let cartItemContainerHTML = "";
 
@@ -13,10 +18,23 @@ cart.forEach((cartItem) => {
         }
     });
 
+    const deliveryOptionId = cartItem.deliveryOptionId;
+
+    let matchingDeliveryOption;
+
+    deliveryOptions.forEach((option) => {
+        if (option.id === deliveryOptionId) {
+            matchingDeliveryOption = option;
+        }
+    });
+
+
+    const dateString = formatDeliveryDate(matchingDeliveryOption.deliveryDays)
+
     cartItemContainerHTML += `
         <div class="cart-item-container js-cart-container-${matchingProduct.id}">
             <div class="delivery-date">
-                Delivery date: Tuesday, June 21
+                Delivery date: ${dateString}
             </div>
 
             <div class="cart-item-details-grid">
@@ -53,45 +71,7 @@ cart.forEach((cartItem) => {
                 <div class="delivery-options-title">
                     Choose a delivery option:
                 </div>
-                <div class="delivery-option">
-                    <input type="radio" checked
-                    class="delivery-option-input"
-                    name="delivery-option-${matchingProduct.id}">
-                    <div>
-                    <div class="delivery-option-date">
-                        Tuesday, June 21
-                    </div>
-                    <div class="delivery-option-price">
-                        FREE Shipping
-                    </div>
-                    </div>
-                </div>
-                <div class="delivery-option">
-                    <input type="radio"
-                    class="delivery-option-input"
-                    name="delivery-option-${matchingProduct.id}">
-                    <div>
-                    <div class="delivery-option-date">
-                        Wednesday, June 15
-                    </div>
-                    <div class="delivery-option-price">
-                        $4.99 - Shipping
-                    </div>
-                    </div>
-                </div>
-                <div class="delivery-option">
-                    <input type="radio"
-                    class="delivery-option-input"
-                    name="delivery-option-${matchingProduct.id}">
-                    <div>
-                    <div class="delivery-option-date">
-                        Monday, June 13
-                    </div>
-                    <div class="delivery-option-price">
-                        $9.99 - Shipping
-                    </div>
-                    </div>
-                </div>
+                ${deliveryOptionsHTML(matchingProduct,cartItem)}
                 </div>
             </div>
             </div>
@@ -148,3 +128,31 @@ document.querySelectorAll('.js-save-quantity-link')
         });
 
     });
+
+function deliveryOptionsHTML(matchingProduct,cartItem) {
+    let html = '';
+
+    deliveryOptions.forEach((option) => {
+        const isChecked = option.id === cartItem.deliveryOptionId;
+        html += 
+            `
+            <div class="delivery-option">
+                <input type="radio" 
+                    ${isChecked ? 'checked' : ''}
+                class="delivery-option-input"
+                name="delivery-option-${matchingProduct.id}">
+                <div>
+                <div class="delivery-option-date">
+                    ${formatDeliveryDate(option.deliveryDays)}
+                </div>
+                <div class="delivery-option-price">
+                    ${formatDeliveryPrice(option.deliveryPriceCents)} Shipping
+                </div>
+                </div>
+            </div>
+            `
+    });
+    return html;
+};
+
+

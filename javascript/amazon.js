@@ -1,6 +1,6 @@
 import {cart, addToCart, calculateCartQuantity} from '../data/cart.js';
 import { products } from '../data/products.js';
-import { centsToDollars } from "./utils/money.js";
+import centsToDollars from "./utils/money.js";
 
 let productHTML = '';
 
