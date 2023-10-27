@@ -166,7 +166,6 @@ export function renderOrderSummary(){
                 const { productId, deliveryOptionId } = element.dataset;
                 updateDeliveryOption(productId,deliveryOptionId)
                 renderOrderSummary();
-                console.log(cart)
             });
         });
 
