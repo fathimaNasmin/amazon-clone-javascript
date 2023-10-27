@@ -5,6 +5,7 @@ import centsToDollars from "../utils/money.js";
 import { deliveryOptions } from "../../data/deliveryOptions.js";
 import { formatDeliveryDate } from "../utils/deliveryDate.js"
 import { formatDeliveryPrice } from "../utils/deliveryPrice.js"
+import { renderPaymentSummary } from "./paymentSummary.js";
 
 
 export function renderOrderSummary(){
@@ -92,6 +93,7 @@ export function renderOrderSummary(){
             cartQuantityReturnHomeLinkElement.innerHTML = `${calculateCartQuantity()} items`;
             const container = document.querySelector(`.js-cart-container-${productId}`);
             container.remove();
+            renderPaymentSummary();
         });
     });
 
@@ -104,7 +106,7 @@ export function renderOrderSummary(){
                 const { productId } = link.dataset;
                 const container = document.querySelector(`.js-cart-container-${productId}`);
                 container.classList.add('is-editing-quantity');
-
+                
             });
         });
 
@@ -166,6 +168,7 @@ export function renderOrderSummary(){
                 const { productId, deliveryOptionId } = element.dataset;
                 updateDeliveryOption(productId,deliveryOptionId)
                 renderOrderSummary();
+                renderPaymentSummary();
             });
         });
 
